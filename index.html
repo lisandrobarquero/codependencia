@@ -12,9 +12,7 @@
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:#0f1117;color:#e8e0d0;font-family:'Georgia',serif}
-  ::-webkit-scrollbar{width:6px}
-  ::-webkit-scrollbar-track{background:#1a1d26}
-  ::-webkit-scrollbar-thumb{background:#3a3f52;border-radius:3px}
+  ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#1a1d26}::-webkit-scrollbar-thumb{background:#3a3f52;border-radius:3px}
   .week-btn{transition:all 0.2s;border:none;width:100%;cursor:pointer;text-align:left}
   .week-btn:hover{background:rgba(255,255,255,0.06)!important}
   .day-card{transition:all 0.25s ease}
@@ -23,12 +21,14 @@
   .check-circle:hover{transform:scale(1.1)}
   .expand-arrow{transition:transform 0.2s}
   .action-btn{transition:all 0.2s;cursor:pointer}
-  .action-btn:hover{opacity:0.85}
+  .action-btn:hover:not(:disabled){opacity:0.85}
   .nav-btn{transition:all 0.2s;cursor:pointer}
   .nav-btn:hover:not(:disabled){background:rgba(255,255,255,0.05)!important}
+  .q-item{border-left:2px solid #2a2d3a;padding:8px 14px;margin-bottom:8px;transition:border-color 0.2s}
+  .q-item:hover{border-left-color:#c49a0066}
   @media(max-width:768px){
     .layout{flex-direction:column!important}
-    .sidebar{width:100%!important;max-height:280px!important;position:relative!important;top:0!important}
+    .sidebar{width:100%!important;max-height:240px!important;position:relative!important;top:0!important}
     .main-content{padding:20px 16px 48px!important}
     h1.week-title{font-size:20px!important}
   }
@@ -39,167 +39,280 @@
 <script type="text/babel">
 const { useState, useEffect, useCallback } = React;
 
+// ─── DATA ────────────────────────────────────────────────────────────────────
+
 const SEMANAS = [
+  // ══════════════════════════════════════════════════════
+  // SEMANA 1 — CONTENIDO COMPLETO
+  // ══════════════════════════════════════════════════════
   {
-    numero:1, paso:"Paso 1", titulo:"Reconocer la Impotencia",
-    descripcion:"Admitimos que éramos impotentes ante nuestra codependencia, que nuestras vidas se habían vuelto ingobernables.",
-    tema:"Honestidad sobre el estado real de nuestra vida", color:"#7B5EA7",
-    dias:[
-      {dia:"Lunes",aspecto:"Honestidad con uno mismo",versiculo:"Jeremías 17:9",texto:'"Más engañoso que todo es el corazón, y sin remedio; ¿quién lo conocerá?"',reflexion:"¿En qué áreas de tu vida te has engañado a ti mismo sobre el control que tienes?"},
-      {dia:"Martes",aspecto:"El peso del control",versiculo:"Mateo 11:28-30",texto:'"Venid a mí todos los que estáis trabajados y cargados, y yo os haré descansar. Llevad mi yugo sobre vosotros… porque mi yugo es fácil y ligera mi carga."',reflexion:"¿Qué cargas estás cargando que no te corresponden cargar?"},
-      {dia:"Miércoles",aspecto:"Reconocer el propio sufrimiento",versiculo:"Salmo 34:18",texto:'"Cercano está el Señor a los quebrantados de corazón, y salva a los abatidos de espíritu."',reflexion:"¿Qué parte de tu sufrimiento has minimizado por enfocarte en los demás?"},
-      {dia:"Jueves",aspecto:"La vida ingobernada",versiculo:"Romanos 7:15-19",texto:'"Porque lo que hago, no lo entiendo; porque no practico lo que quiero hacer, sino lo que aborrezco, eso hago."',reflexion:"¿Qué patrones repites aunque sabes que te hacen daño?"},
-      {dia:"Viernes",aspecto:"La verdad como liberación",versiculo:"Juan 8:32",texto:'"Y conoceréis la verdad, y la verdad os hará libres."',reflexion:"¿Qué verdad sobre tu situación has evitado enfrentar? ¿Cómo sería tu vida si la afrontaras?"},
-      {dia:"Sábado",aspecto:"Dejar de fingir",versiculo:"Proverbios 28:13",texto:'"El que encubre sus pecados no prosperará, pero el que los confiesa y los abandona hallará misericordia."',reflexion:"¿Qué estás encubriendo, ante otros o ante ti mismo, sobre cómo realmente está tu vida?"}
+    numero: 1, paso: "Paso 1", titulo: "Reconocer la Impotencia",
+    descripcion: "Acepto que mi vida se ha vuelto ingobernable ante las conductas de otro ser humano.",
+    tema: "Honestidad radical sobre el estado real de tu vida",
+    color: "#7B5EA7", completo: true,
+    tarea: [
+      "Tocá tu vulnerabilidad — Identificá dónde no tenés poder real, aunque hayas creído que sí lo tenías.",
+      "Sentí la incomodidad — No huyas del momento en que sentís el miedo de soltar. Quedáte ahí un momento. Observálo.",
+      "Tocá el dolor — El miedo a perder, el miedo a que se vayan. Nombralo. No hay que resolverlo hoy, solo reconocerlo.",
+      "Descubrí tu propia verdad — Preguntate qué es verdadero para vos, más allá de lo que el otro necesita o espera."
+    ],
+    dias: [
+      {
+        dia: "Lunes",
+        aspecto: "¿Cuándo es el momento de decir 'ya basta'?",
+        ensenanza: `Hay una pregunta que muchos postergamos por años: ¿cuándo es momento de soltar? Nos quedamos tanto tiempo en relaciones, trabajos o dinámicas que nos lastiman, porque aprendemos que no darse por vencidos es una virtud. Y en parte lo es: la perseverancia funciona muy bien para logros personales. Pero en las relaciones, aferrarse a lo que no funciona no es valentía — es una trampa.
+
+La codependencia no es solo quedarse en una relación difícil. También puede ser no entrar a ninguna relación por miedo, o salir corriendo apenas algo se complica. En ambos casos, algo interno nos está gobernando — y ese algo no somos nosotros en libertad.
+
+El primer paso no es rendirse. Es honrar la verdad: mi vida se ha vuelto ingobernable. No porque seas débil, sino porque aprendiste a funcionar de una manera que ya no te sirve.`,
+        versiculos: [
+          { ref: "Mateo 11:28-30", texto: "\"Venid a mí todos los que estáis trabajados y cargados, y yo os haré descansar. Llevad mi yugo sobre vosotros, porque mi yugo es fácil y ligera mi carga.\"" }
+        ],
+        preguntas: [
+          "¿Hay alguna relación, situación o dinámica en tu vida donde sabés, en el fondo, que ya es tiempo de hacer algo diferente, pero has postergado esa decisión? ¿Qué te has dicho para justificarlo?",
+          "¿Estás dentro de relaciones que te hacen daño sin poder salir, o por el contrario, evitás entrar a relaciones por miedo? ¿Cómo se manifiesta eso en tu vida concreta?",
+          "¿Qué cargas estás llevando hoy que no te corresponden? ¿A quién o a qué le estás dando tu energía, tu sueño, tu salud, mientras vos quedás en segundo lugar?"
+        ]
+      },
+      {
+        dia: "Martes",
+        aspecto: "Lo que aprendiste en la infancia",
+        ensenanza: `La codependencia no empieza en tu relación de pareja. Empieza mucho antes. Empieza cuando eras pequeño y tuviste que adaptarte a un entorno donde tus emociones no eran bienvenidas, donde llorar era de débiles, donde tenías que ser fuerte para sobrevivir.
+
+Quizás papá se fue y tuviste que madurar de golpe. Quizás mamá nunca te abrazaba y aprendiste a no necesitar abrazos. Quizás te gritaban y aprendiste a quedarte callado. Quizás nadie te preguntaba cómo estabas y aprendiste a no preguntarte tú mismo.
+
+Esas formas de adaptarte — que en su momento te protegieron — se llaman conductas adaptativas. El problema es que de adulto seguís usándolas: anulás tus necesidades, callás lo que sentís, das por encima de tus fuerzas, y creés que eso es amor. No lo aprendiste por error. Lo aprendiste para sobrevivir. Pero hoy ya sos adulto, y podés aprender algo distinto.`,
+        versiculos: [
+          { ref: "Salmo 139:23-24", texto: "\"Examíname, oh Dios, y conoce mi corazón; pruébame y conoce mis pensamientos. Ve si hay en mí camino de perversidad, y guíame en el camino eterno.\"" }
+        ],
+        preguntas: [
+          "¿Qué situación de tu infancia te enseñó a ignorar tus propios sentimientos? ¿Cuándo fue la primera vez que aprendiste que expresar lo que sentías era peligroso o inútil?",
+          "¿De qué manera te trataron de pequeño que hoy te seguís tratando a vos mismo? (Por ejemplo: te ignoraban → hoy te ignorás; te exigían perfección → hoy te exigís sin límite; nunca eras suficiente → hoy tampoco te sentís suficiente.)",
+          "¿Qué necesitaba ese niño o niña que eras — y que nunca recibió? ¿Podés nombrarlo sin juzgarte?"
+        ]
+      },
+      {
+        dia: "Miércoles",
+        aspecto: "Los roles que jugamos en las relaciones",
+        ensenanza: `Cuando entramos a una relación codependiente, inconscientemente tomamos un rol. A veces somos la mamá de nuestra pareja. A veces somos la hija que busca aprobación. A veces somos el rescatador, el que soluciona todo, el que carga con lo que el otro no puede. A veces somos el controlador disfrazado de cuidador.
+
+Ninguno de esos roles es el tuyo. Son personajes que adoptaste para que las cosas "funcionen", para que el otro no se vaya, para sentirte necesario o valioso.
+
+La pregunta clave es directa: ¿qué papel has estado cubriendo? Porque mientras sigás en ese papel, las cosas que pasan en tu relación no van a cambiar — porque vos las estás sosteniendo. Las cosas pasan porque las permitimos. Y las permitimos porque desde algún lugar interno creemos que ese es el papel que nos toca.`,
+        versiculos: [
+          { ref: "Romanos 7:15", texto: "\"Porque lo que hago, no lo entiendo; porque no practico lo que quiero hacer, sino lo que aborrezco, eso hago.\"" }
+        ],
+        preguntas: [
+          "¿Cuál es el rol que repetís en tus relaciones más significativas? (Rescatador, complaciente, controlador, víctima, cuidador eterno, el que nunca necesita nada...) ¿De dónde crees que viene ese rol?",
+          "¿Qué creés que va a pasar si dejás de jugar ese rol? ¿Qué es lo que más te da miedo perder si empezás a relacionarte de otra manera?",
+          "Pensá en una relación concreta de tu vida. ¿Qué cosas estás haciendo — o dejando de hacer — que le corresponderían al otro y que vos estás cargando? ¿Cómo te afecta eso?"
+        ]
+      },
+      {
+        dia: "Jueves",
+        aspecto: "El juego del control y sus consecuencias",
+        ensenanza: `La codependencia es como estar apostando en un casino. Apostás 100, después 1.000, después todo lo que tenés — con la esperanza de que esta vez va a funcionar, de que esta vez el otro va a cambiar. Y seguís apostando hasta quedarte sin nada: sin energía, sin autoestima, sin vida propia.
+
+Lo paradójico del control es esto: cuando intentás controlar a alguien, terminás siendo vos el controlado. Si no dormís bien porque el otro no llegó temprano, si tu humor depende del humor del otro — ya no sos libre. La vida de otro está gobernando la tuya.
+
+Y las consecuencias de no parar son reales: enfermedades físicas, estrés crónico, aislamiento, quiebre emocional. La codependencia que no se trata puede llevar a lugares muy oscuros. No porque seas malo, sino porque ningún ser humano fue diseñado para cargar con la vida de otro.`,
+        versiculos: [
+          { ref: "Proverbios 4:23", texto: "\"Sobre toda cosa guardada, guarda tu corazón, porque de él mana la vida.\"" }
+        ],
+        preguntas: [
+          "¿En qué áreas de tu vida el comportamiento de otra persona está controlando tu humor, tu descanso, tu productividad o tu bienestar? ¿Cuánto de tu energía diaria se va en pensar en lo que el otro hace o no hace?",
+          "La imagen del casino: ¿cuánto has \"apostado\" en alguna relación — tiempo, esfuerzo, salud — esperando un resultado que nunca llegó? ¿En qué momento decidiste seguir apostando aunque ya no había retorno?",
+          "¿Qué consecuencias físicas, emocionales o sociales ha tenido en tu vida esta forma de relacionarte? (Salud, amistades, trabajo, autoestima.) Nombrá al menos tres."
+        ]
+      },
+      {
+        dia: "Viernes",
+        aspecto: "La incomodidad de soltar el control",
+        ensenanza: `Hay un momento clave en este camino: el momento en que decidís parar. Dejar de intentar cambiar al otro, dejar de apostar, dejar de controlar. Y ese momento no se siente como alivio. Se siente como miedo.
+
+Porque cuando parás, entran las preguntas: "¿y si me deja?", "¿y si se enoja?", "¿y si se destruye sin mí?" Esas preguntas — los "y si..." — que llevamos años respondiendo con más control, más rescate, más esfuerzo.
+
+El dolor emocional que aparece cuando soltás no es señal de que hiciste algo malo. Es la señal de que por fin estás siendo honesto. Y a veces, al soltar, descubrís que el otro ni siquiera se iba a ir — que todo ese miedo estaba dentro de vos, no en la realidad. Soltar no es indiferencia. Es el acto de dejar que el otro sea responsable de su propia vida, mientras vos empezás a ser responsable de la tuya.`,
+        versiculos: [
+          { ref: "Filipenses 4:6-7", texto: "\"Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración y ruego, con acción de gracias. Y la paz de Dios, que sobrepasa todo entendimiento, guardará vuestros corazones.\"" }
+        ],
+        preguntas: [
+          "¿Cuáles son tus principales \"y si...\"? ¿Qué es lo que más te frena cuando estás a punto de poner un límite, de soltar, de decir 'hasta acá'? Escribilos sin filtro.",
+          "¿Alguna vez soltaste el control en alguna situación y descubriste que el miedo era más grande que la realidad? ¿Qué pasó? ¿Qué te enseñó esa experiencia?",
+          "¿Qué creés que pasaría — en tu vida, en tu cuerpo, en tu mente — si dejases de intentar controlar una situación o persona específica durante una semana? ¿Qué te genera imaginar eso?"
+        ]
+      },
+      {
+        dia: "Sábado",
+        aspecto: "El camino de regreso a uno mismo",
+        ensenanza: `Toda la energía que pusiste hacia afuera — hacia el otro, hacia cambiar al otro, hacia controlarlo — puede comenzar a fluir hacia adentro. Este es el corazón del Paso 1: no es solo reconocer el problema, es empezar a girar el foco.
+
+En vez de preguntarte ¿qué tiene que cambiar el otro?, empezás a preguntarte: ¿qué he hecho yo? ¿Qué me he hecho a mí mismo? ¿Qué necesito? ¿Qué siento? ¿Qué quiero?
+
+Veniste al mundo con un corazón con toda la capacidad de amar. Esa capacidad se fue quebrando con cada experiencia dolorosa que no fue resuelta. Pero no desapareció. Se fue bloqueando. Reconocer la impotencia — admitir que no podés cambiar al otro, que tu vida se volvió ingobernable — no es derrota. Es el primer acto de amor real hacia vos mismo.`,
+        versiculos: [
+          { ref: "Salmo 34:18", texto: "\"Cercano está el Señor a los quebrantados de corazón, y salva a los abatidos de espíritu.\"" },
+          { ref: "Juan 8:32", texto: "\"Y conoceréis la verdad, y la verdad os hará libres.\"" }
+        ],
+        preguntas: [
+          "¿Cuál es la verdad que esta semana de reflexión te está mostrando sobre vos mismo? No sobre el otro — sobre vos. ¿Qué patrón reconocés claramente ahora que antes no querías ver?",
+          "¿Qué significaría para vos empezar a darte el mismo cuidado, atención y energía que le has dado a otros? ¿Qué sería lo primero que cambiarías si empezaras a ponerte en primer lugar?",
+          "Escribí una declaración personal de Paso 1 con tus propias palabras: \"Hoy reconozco que mi vida se ha vuelto ingobernable porque...\" Sé honesto. Nadie más tiene que leerla."
+        ]
+      }
     ]
   },
+
+  // ══════════════════════════════════════════════════════
+  // SEMANAS 2-12 — PLACEHOLDERS (próximamente)
+  // ══════════════════════════════════════════════════════
   {
     numero:2, paso:"Paso 2", titulo:"Creer en un Poder Superior",
     descripcion:"Llegamos a creer que un Poder superior a nosotros mismos podría devolvernos el sano juicio.",
-    tema:"Abrir el corazón a la esperanza", color:"#2E6DA4",
+    tema:"Abrir el corazón a la esperanza", color:"#2E6DA4", completo:false,
     dias:[
-      {dia:"Lunes",aspecto:"Abrirse a la esperanza",versiculo:"Jeremías 29:11",texto:'"Porque yo sé los pensamientos que tengo acerca de vosotros, dice el Señor, pensamientos de paz y no de mal, para daros el fin que esperáis."',reflexion:"¿Qué significaría para ti creer que Dios tiene planes de bien para tu vida, incluso ahora?"},
+      {dia:"Lunes",aspecto:"Abrirse a la esperanza",versiculo:"Jeremías 29:11",texto:'"Porque yo sé los pensamientos que tengo acerca de vosotros, dice el Señor, pensamientos de paz y no de mal."',reflexion:"¿Qué significaría para ti creer que Dios tiene planes de bien para tu vida, incluso ahora?"},
       {dia:"Martes",aspecto:"Dios puede restaurar la mente",versiculo:"Romanos 12:2",texto:'"No os conforméis a este siglo, sino transformaos por medio de la renovación de vuestro entendimiento."',reflexion:"¿Qué pensamientos o creencias sobre ti mismo necesitan ser renovados?"},
-      {dia:"Miércoles",aspecto:"No confiar solo en tu entendimiento",versiculo:"Proverbios 3:5-6",texto:'"Confía en el Señor con todo tu corazón, y no te apoyes en tu propio entendimiento. Reconócele en todos tus caminos, y él enderezará tus veredas."',reflexion:"¿En qué situaciones tiendes a confiar más en tu propio análisis que en la dirección de Dios?"},
+      {dia:"Miércoles",aspecto:"No confiar solo en tu entendimiento",versiculo:"Proverbios 3:5-6",texto:'"Confía en el Señor con todo tu corazón, y no te apoyes en tu propio entendimiento."',reflexion:"¿En qué situaciones tiendes a confiar más en tu propio análisis que en la dirección de Dios?"},
       {dia:"Jueves",aspecto:"La fe como punto de partida",versiculo:"Hebreos 11:1",texto:'"Es, pues, la fe la certeza de lo que se espera, la convicción de lo que no se ve."',reflexion:"¿Qué le pedirías a Dios si creyeras de verdad que puede cambiar las cosas?"},
-      {dia:"Viernes",aspecto:"Dios es mayor que nuestro corazón",versiculo:"1 Juan 3:20",texto:'"Porque si nuestro corazón nos condena, mayor que nuestro corazón es Dios, y él sabe todas las cosas."',reflexion:"¿De qué maneras tu propio corazón te ha dicho que no hay esperanza? ¿Puedes confiar en que Dios es mayor que eso?"},
-      {dia:"Sábado",aspecto:"La comunidad como reflejo de Dios",versiculo:"Gálatas 6:2",texto:'"Sobrellevad los unos las cargas de los otros, y cumplid así la ley de Cristo."',reflexion:"¿Tienes personas en tu vida con quienes puedas compartir este camino? ¿Qué te impide buscarlas?"}
+      {dia:"Viernes",aspecto:"Dios es mayor que nuestro corazón",versiculo:"1 Juan 3:20",texto:'"Porque si nuestro corazón nos condena, mayor que nuestro corazón es Dios."',reflexion:"¿De qué maneras tu propio corazón te ha dicho que no hay esperanza? ¿Podés confiar en que Dios es mayor que eso?"},
+      {dia:"Sábado",aspecto:"La comunidad como reflejo de Dios",versiculo:"Gálatas 6:2",texto:'"Sobrellevad los unos las cargas de los otros, y cumplid así la ley de Cristo."',reflexion:"¿Tenés personas en tu vida con quienes puedas compartir este camino?"}
     ]
   },
   {
     numero:3, paso:"Paso 3", titulo:"Entregar la Voluntad",
     descripcion:"Decidimos poner nuestra voluntad y nuestra vida al cuidado de Dios, tal como lo concebimos.",
-    tema:"Soltar el control como acto de fe", color:"#2A8C6E",
+    tema:"Soltar el control como acto de fe", color:"#2A8C6E", completo:false,
     dias:[
       {dia:"Lunes",aspecto:"La entrega como decisión consciente",versiculo:"Mateo 16:24",texto:'"Si alguno quiere venir en pos de mí, niéguese a sí mismo, y tome su cruz, y sígame."',reflexion:"¿Qué parte de tu vida estás resistiendo entregar a Dios?"},
-      {dia:"Martes",aspecto:"Descansar en lugar de controlar",versiculo:"Salmo 46:10",texto:'"Estad quietos, y conoced que yo soy Dios."',reflexion:"¿Qué pasaría si hoy dejases de intentar solucionar lo que no puedes controlar?"},
+      {dia:"Martes",aspecto:"Descansar en lugar de controlar",versiculo:"Salmo 46:10",texto:'"Estad quietos, y conoced que yo soy Dios."',reflexion:"¿Qué pasaría si hoy dejases de intentar solucionar lo que no podés controlar?"},
       {dia:"Miércoles",aspecto:"La voluntad de Dios sobre la nuestra",versiculo:"Proverbios 16:9",texto:'"La mente del hombre planea su camino, pero el Señor dirige sus pasos."',reflexion:"¿Hay planes o expectativas tuyas que quizás están bloqueando lo que Dios quiere hacer?"},
-      {dia:"Jueves",aspecto:"Confiar aunque no entendamos",versiculo:"Isaías 55:8-9",texto:'"Porque mis pensamientos no son vuestros pensamientos, ni vuestros caminos mis caminos, dice el Señor."',reflexion:"¿Puedes identificar un momento en tu vida donde algo que no entendías resultó ser bueno?"},
-      {dia:"Viernes",aspecto:"La paz como señal de entrega",versiculo:"Filipenses 4:6-7",texto:'"Por nada estéis afanosos… y la paz de Dios, que sobrepasa todo entendimiento, guardará vuestros corazones."',reflexion:"¿Qué situación hoy te está robando la paz? Practica entregársela a Dios en oración."},
-      {dia:"Sábado",aspecto:"Entregarle las cargas porque le importas",versiculo:"1 Pedro 5:7",texto:'"Echando toda vuestra ansiedad sobre él, porque él tiene cuidado de vosotros."',reflexion:"¿Crees realmente que le importas a Dios? ¿Qué cambiaría si lo creyeras con más profundidad?"}
+      {dia:"Jueves",aspecto:"Confiar aunque no entendamos",versiculo:"Isaías 55:8-9",texto:'"Porque mis pensamientos no son vuestros pensamientos, ni vuestros caminos mis caminos."',reflexion:"¿Podés identificar un momento donde algo que no entendías resultó ser bueno?"},
+      {dia:"Viernes",aspecto:"La paz como señal de entrega",versiculo:"Filipenses 4:6-7",texto:'"Por nada estéis afanosos… y la paz de Dios guardará vuestros corazones."',reflexion:"¿Qué situación hoy te está robando la paz? Practicá entregársela a Dios en oración."},
+      {dia:"Sábado",aspecto:"Entregarle las cargas porque le importás",versiculo:"1 Pedro 5:7",texto:'"Echando toda vuestra ansiedad sobre él, porque él tiene cuidado de vosotros."',reflexion:"¿Creés realmente que le importás a Dios? ¿Qué cambiaría si lo creyeras más profundamente?"}
     ]
   },
   {
     numero:4, paso:"Paso 4", titulo:"El Inventario Moral",
     descripcion:"Sin miedo, hicimos un inventario moral de nosotros mismos.",
-    tema:"Introspección honesta sin condenación", color:"#B5651D",
+    tema:"Introspección honesta sin condenación", color:"#B5651D", completo:false,
     dias:[
-      {dia:"Lunes",aspecto:"Pedir a Dios que examine el corazón",versiculo:"Salmo 139:23-24",texto:'"Examíname, oh Dios, y conoce mi corazón; pruébame y conoce mis pensamientos. Ve si hay en mí camino de perversidad, y guíame en el camino eterno."',reflexion:"Pasa tiempo en silencio y permite que Dios te muestre áreas de tu vida que necesitas ver con más claridad."},
-      {dia:"Martes",aspecto:"Los patrones que repetimos",versiculo:"Romanos 7:21-24",texto:'"Así que, queriendo yo hacer el bien, hallo esta ley: que el mal está en mí."',reflexion:"¿Qué patrón has repetido en tus relaciones que reconoces como dañino?"},
-      {dia:"Miércoles",aspecto:"Los resentimientos que cargamos",versiculo:"Efesios 4:31-32",texto:'"Quítense de vosotros toda amargura, enojo, ira… antes sed bondadosos unos con otros, misericordiosos."',reflexion:"Escribe una lista honesta de las personas con quienes guardas resentimiento."},
+      {dia:"Lunes",aspecto:"Pedir a Dios que examine el corazón",versiculo:"Salmo 139:23-24",texto:'"Examíname, oh Dios, y conoce mi corazón; pruébame y conoce mis pensamientos."',reflexion:"Pasá tiempo en silencio y permitile a Dios mostrarte áreas que necesitás ver con más claridad."},
+      {dia:"Martes",aspecto:"Los patrones que repetimos",versiculo:"Romanos 7:21-24",texto:'"Así que, queriendo yo hacer el bien, hallo esta ley: que el mal está en mí."',reflexion:"¿Qué patrón has repetido en tus relaciones que reconocés como dañino?"},
+      {dia:"Miércoles",aspecto:"Los resentimientos que cargamos",versiculo:"Efesios 4:31-32",texto:'"Quítense de vosotros toda amargura, enojo, ira… sed bondadosos unos con otros."',reflexion:"Escribí una lista honesta de las personas con quienes guardás resentimiento."},
       {dia:"Jueves",aspecto:"El miedo como raíz",versiculo:"2 Timoteo 1:7",texto:'"Porque no nos ha dado Dios espíritu de cobardía, sino de poder, de amor y de dominio propio."',reflexion:"¿Qué miedos guían tus decisiones? (miedo al abandono, al rechazo, a no ser suficiente)"},
-      {dia:"Viernes",aspecto:"Los límites que ignoramos",versiculo:"Proverbios 4:23",texto:'"Sobre toda cosa guardada, guarda tu corazón, porque de él mana la vida."',reflexion:"¿Dónde has dejado que otros crucen límites? ¿Dónde cruzaste tú los límites de otros?"},
-      {dia:"Sábado",aspecto:"El valor del examen de conciencia",versiculo:"Lamentaciones 3:40",texto:'"Escudriñemos nuestros caminos y busquemos, y volvámonos al Señor."',reflexion:"Repasa la semana. ¿Qué has descubierto sobre ti mismo? ¿Qué quieres cambiar?"}
+      {dia:"Viernes",aspecto:"Los límites que ignoramos",versiculo:"Proverbios 4:23",texto:'"Sobre toda cosa guardada, guarda tu corazón, porque de él mana la vida."',reflexion:"¿Dónde has dejado que otros crucen límites? ¿Dónde cruzaste vos los límites de otros?"},
+      {dia:"Sábado",aspecto:"El valor del examen de conciencia",versiculo:"Lamentaciones 3:40",texto:'"Escudriñemos nuestros caminos y busquemos, y volvámonos al Señor."',reflexion:"Repasá la semana. ¿Qué descubriste sobre vos mismo? ¿Qué querés cambiar?"}
     ]
   },
   {
     numero:5, paso:"Paso 5", titulo:"Admitir ante Otros",
     descripcion:"Admitimos ante Dios, ante nosotros mismos y ante otro ser humano la naturaleza exacta de nuestras faltas.",
-    tema:"El poder sanador de la vulnerabilidad", color:"#8B3A62",
+    tema:"El poder sanador de la vulnerabilidad", color:"#8B3A62", completo:false,
     dias:[
-      {dia:"Lunes",aspecto:"El poder de la confesión",versiculo:"Santiago 5:16",texto:'"Confesaos vuestras ofensas unos a otros, y orad unos por otros, para que seáis sanados."',reflexion:"¿Por qué crees que la confesión ante otra persona tiene poder sanador? ¿Qué te impide hacerlo?"},
-      {dia:"Martes",aspecto:"No hay condenación en Cristo",versiculo:"Romanos 8:1",texto:'"Ahora, pues, ninguna condenación hay para los que están en Cristo Jesús."',reflexion:"¿Qué te da más miedo que alguien descubra de ti?"},
-      {dia:"Miércoles",aspecto:"Ser conocido y aceptado",versiculo:"1 Juan 1:7-9",texto:'"Si andamos en luz… tenemos comunión unos con otros… Si confesamos nuestros pecados, él es fiel y justo para perdonarnos."',reflexion:"¿Has experimentado alguna vez la liberación de ser honesto con alguien de confianza?"},
-      {dia:"Jueves",aspecto:"Elegir a alguien de confianza",versiculo:"Proverbios 11:14",texto:'"En la multitud de consejeros hay seguridad."',reflexion:"¿Hay alguien en tu vida que sea seguro para recibir tu historia? ¿Qué características buscarías en esa persona?"},
-      {dia:"Viernes",aspecto:"La comunidad como restauración",versiculo:"Gálatas 6:1-2",texto:'"Hermanos, si alguno fuere sorprendido en alguna falta, vosotros que sois espirituales, restauradle con espíritu de mansedumbre."',reflexion:"¿Cómo cambiaría tu comunidad si todos fuesen más honestos sobre sus luchas?"},
-      {dia:"Sábado",aspecto:"El alivio de la transparencia",versiculo:"Salmo 32:3-5",texto:'"Mientras callé, se envejecieron mis huesos… Entonces te declaré mi pecado… y tú perdonaste la maldad de mi pecado."',reflexion:"¿Qué llevas cargando en silencio hace mucho tiempo? ¿Estás listo para compartirlo?"}
+      {dia:"Lunes",aspecto:"El poder de la confesión",versiculo:"Santiago 5:16",texto:'"Confesaos vuestras ofensas unos a otros, y orad unos por otros, para que seáis sanados."',reflexion:"¿Por qué creés que la confesión ante otra persona tiene poder sanador? ¿Qué te impide hacerlo?"},
+      {dia:"Martes",aspecto:"No hay condenación en Cristo",versiculo:"Romanos 8:1",texto:'"Ahora, pues, ninguna condenación hay para los que están en Cristo Jesús."',reflexion:"¿Qué te da más miedo que alguien descubra de vos?"},
+      {dia:"Miércoles",aspecto:"Ser conocido y aceptado",versiculo:"1 Juan 1:7-9",texto:'"Si confesamos nuestros pecados, él es fiel y justo para perdonarnos."',reflexion:"¿Has experimentado alguna vez la liberación de ser honesto con alguien de confianza?"},
+      {dia:"Jueves",aspecto:"Elegir a alguien de confianza",versiculo:"Proverbios 11:14",texto:'"En la multitud de consejeros hay seguridad."',reflexion:"¿Hay alguien en tu vida que sea seguro para recibir tu historia?"},
+      {dia:"Viernes",aspecto:"La comunidad como restauración",versiculo:"Gálatas 6:1-2",texto:'"Si alguno fuere sorprendido en alguna falta, restauradle con espíritu de mansedumbre."',reflexion:"¿Cómo cambiaría tu comunidad si todos fuesen más honestos sobre sus luchas?"},
+      {dia:"Sábado",aspecto:"El alivio de la transparencia",versiculo:"Salmo 32:3-5",texto:'"Mientras callé, se envejecieron mis huesos… Entonces te declaré mi pecado y tú perdonaste."',reflexion:"¿Qué llevás cargando en silencio hace mucho tiempo?"}
     ]
   },
   {
     numero:6, paso:"Paso 6", titulo:"Disposición al Cambio",
     descripcion:"Estuvimos completamente dispuestos a que Dios eliminase todos estos defectos de carácter.",
-    tema:"Rendirse a la transformación de Dios", color:"#3D7A8A",
+    tema:"Rendirse a la transformación de Dios", color:"#3D7A8A", completo:false,
     dias:[
-      {dia:"Lunes",aspecto:"La disposición ya es un paso",versiculo:"Filipenses 2:13",texto:'"Porque Dios es el que en vosotros produce así el querer como el hacer, por su buena voluntad."',reflexion:"No tienes que sentirte completamente listo. ¿Puedes al menos estar dispuesto a estar dispuesto?"},
-      {dia:"Martes",aspecto:"Soltar la seguridad falsa",versiculo:"Isaías 43:18-19",texto:'"No os acordéis de las cosas pasadas… He aquí que yo hago cosa nueva; pronto saldrá a luz."',reflexion:"¿Qué hábito te da una sensación de control o seguridad, aunque sabes que te hace daño?"},
-      {dia:"Miércoles",aspecto:"El corazón nuevo que Dios promete",versiculo:"Ezequiel 36:26",texto:'"Os daré corazón nuevo, y pondré espíritu nuevo dentro de vosotros; y quitaré de vuestra carne el corazón de piedra."',reflexion:"¿Qué área de tu corazón sientes que está endurecida? ¿Puedes pedirle a Dios que la ablande?"},
-      {dia:"Jueves",aspecto:"La transformación es obra de Dios",versiculo:"2 Corintios 5:17",texto:'"De modo que si alguno está en Cristo, nueva criatura es; las cosas viejas pasaron; he aquí todas son hechas nuevas."',reflexion:"¿Estás intentando cambiarte a ti mismo solo con fuerza de voluntad? ¿Qué sería diferente si lo hicieras con Dios?"},
+      {dia:"Lunes",aspecto:"La disposición ya es un paso",versiculo:"Filipenses 2:13",texto:'"Porque Dios es el que en vosotros produce así el querer como el hacer."',reflexion:"No tenés que sentirte completamente listo. ¿Podés al menos estar dispuesto a estar dispuesto?"},
+      {dia:"Martes",aspecto:"Soltar la seguridad falsa",versiculo:"Isaías 43:18-19",texto:'"No os acordéis de las cosas pasadas… He aquí que yo hago cosa nueva."',reflexion:"¿Qué hábito te da una sensación de control aunque sabés que te hace daño?"},
+      {dia:"Miércoles",aspecto:"El corazón nuevo que Dios promete",versiculo:"Ezequiel 36:26",texto:'"Os daré corazón nuevo, y pondré espíritu nuevo dentro de vosotros."',reflexion:"¿Qué área de tu corazón sentís que está endurecida?"},
+      {dia:"Jueves",aspecto:"La transformación es obra de Dios",versiculo:"2 Corintios 5:17",texto:'"Si alguno está en Cristo, nueva criatura es; las cosas viejas pasaron."',reflexion:"¿Estás intentando cambiarte solo con fuerza de voluntad? ¿Qué sería diferente si lo hicieras con Dios?"},
       {dia:"Viernes",aspecto:"Dejar la identidad vieja",versiculo:"Efesios 4:22-24",texto:'"Despojaos del viejo hombre… y revestíos del nuevo hombre, creado según Dios."',reflexion:"¿Qué parte de tu identidad está construida sobre ser el que salva, complace o controla?"},
-      {dia:"Sábado",aspecto:"Ofrendar la voluntad",versiculo:"Romanos 12:1",texto:'"Os ruego… que presentéis vuestros cuerpos en sacrificio vivo, santo, agradable a Dios."',reflexion:"En oración, entrega hoy tus defectos de carácter a Dios. No tienes que entender cómo los va a quitar."}
+      {dia:"Sábado",aspecto:"Ofrendar la voluntad",versiculo:"Romanos 12:1",texto:'"Presentad vuestros cuerpos en sacrificio vivo, santo, agradable a Dios."',reflexion:"En oración, entregale hoy tus defectos de carácter a Dios."}
     ]
   },
   {
     numero:7, paso:"Paso 7", titulo:"La Humildad",
     descripcion:"Humildemente le pedimos que nos liberase de nuestras faltas.",
-    tema:"Pedir con humildad, no con vergüenza", color:"#5C7A3E",
+    tema:"Pedir con humildad, no con vergüenza", color:"#5C7A3E", completo:false,
     dias:[
-      {dia:"Lunes",aspecto:"¿Qué es realmente la humildad?",versiculo:"Miqueas 6:8",texto:'"¿Qué pide el Señor de ti? Solamente hacer justicia, y amar misericordia, y humillarte ante tu Dios."',reflexion:"La humildad no es creer que eres menos que otros, sino ver la realidad con claridad. ¿Cómo defines tú la humildad?"},
-      {dia:"Martes",aspecto:"Humildad sin autodesprecio",versiculo:"Salmo 131:1-2",texto:'"Señor, no se ha envanecido mi corazón… He acallado y quietado mi alma como un niño destetado."',reflexion:"¿Confundes la humildad con inseguridad? ¿Cómo sería estar en paz sin tener que demostrar nada?"},
-      {dia:"Miércoles",aspecto:"Dios da gracia al humilde",versiculo:"Santiago 4:6",texto:'"Dios resiste a los soberbios, y da gracia a los humildes."',reflexion:"¿En qué relaciones tiendes a actuar desde la soberbia (querer tener la razón, controlar, saber más)?"},
-      {dia:"Jueves",aspecto:"Pedir sin vergüenza",versiculo:"Mateo 7:7-8",texto:'"Pedid, y se os dará; buscad, y hallaréis… Porque todo aquel que pide, recibe."',reflexion:"¿Qué te cuesta pedirle a Dios? ¿Hay algo que no le pides porque sientes que no lo mereces?"},
-      {dia:"Viernes",aspecto:"La fuerza en reconocer los límites",versiculo:"2 Corintios 12:9-10",texto:'"Bástate mi gracia; porque mi poder se perfecciona en la debilidad… cuando soy débil, entonces soy fuerte."',reflexion:"¿Qué debilidad tuya has intentado esconder? ¿Puedes permitir que sea el lugar donde Dios actúa?"},
-      {dia:"Sábado",aspecto:"Dependencia de Dios, no de uno mismo",versiculo:"Filipenses 4:13",texto:'"Todo lo puedo en Cristo que me fortalece."',reflexion:"Este versículo habla de hacerlo con Cristo, no solo. ¿Qué necesitas hoy que solo Él puede darte?"}
+      {dia:"Lunes",aspecto:"¿Qué es realmente la humildad?",versiculo:"Miqueas 6:8",texto:'"¿Qué pide el Señor de ti? Solamente hacer justicia, amar misericordia y humillarte ante tu Dios."',reflexion:"¿Cómo definís vos la humildad?"},
+      {dia:"Martes",aspecto:"Humildad sin autodesprecio",versiculo:"Salmo 131:1-2",texto:'"He acallado y quietado mi alma como un niño destetado."',reflexion:"¿Confundís la humildad con inseguridad? ¿Cómo sería estar en paz sin tener que demostrar nada?"},
+      {dia:"Miércoles",aspecto:"Dios da gracia al humilde",versiculo:"Santiago 4:6",texto:'"Dios resiste a los soberbios, y da gracia a los humildes."',reflexion:"¿En qué relaciones tendés a actuar desde la soberbia?"},
+      {dia:"Jueves",aspecto:"Pedir sin vergüenza",versiculo:"Mateo 7:7-8",texto:'"Pedid, y se os dará; buscad, y hallaréis."',reflexion:"¿Qué te cuesta pedirle a Dios? ¿Hay algo que no le pedís porque sentís que no lo merecés?"},
+      {dia:"Viernes",aspecto:"La fuerza en reconocer los límites",versiculo:"2 Corintios 12:9-10",texto:'"Bástate mi gracia; porque mi poder se perfecciona en la debilidad."',reflexion:"¿Qué debilidad tuya has intentado esconder?"},
+      {dia:"Sábado",aspecto:"Dependencia de Dios, no de uno mismo",versiculo:"Filipenses 4:13",texto:'"Todo lo puedo en Cristo que me fortalece."',reflexion:"¿Qué necesitás hoy que solo Él puede darte?"}
     ]
   },
   {
     numero:8, paso:"Paso 8", titulo:"Lista de Personas Afectadas",
     descripcion:"Hicimos una lista de todas las personas a quienes habíamos perjudicado y estuvimos dispuestos a reparar el daño.",
-    tema:"Asumir responsabilidad por el impacto en otros", color:"#7A4E2D",
+    tema:"Asumir responsabilidad por el impacto en otros", color:"#7A4E2D", completo:false,
     dias:[
-      {dia:"Lunes",aspecto:"Ver el impacto en los demás",versiculo:"Mateo 5:23-24",texto:'"Si traes tu ofrenda al altar, y allí te acuerdas de que tu hermano tiene algo contra ti, deja tu ofrenda… y reconcíliate primero con tu hermano."',reflexion:"¿Hay alguien que lleva una herida que tú le causaste, aunque sea sin intención?"},
-      {dia:"Martes",aspecto:"Honestidad sobre el daño causado",versiculo:"Lucas 15:17-18",texto:'"Volviendo en sí, dijo: ¡Cuántos jornaleros en casa de mi padre tienen abundancia de pan… Me levantaré e iré a mi padre y le diré: Pequé."',reflexion:"¿Puedes, como el hijo pródigo, hacer un recuento honesto sin excusas ni justificaciones?"},
-      {dia:"Miércoles",aspecto:"Sin justificar las heridas causadas",versiculo:"Proverbios 20:9",texto:'"¿Quién podrá decir: Yo he limpiado mi corazón, limpio estoy de mi pecado?"',reflexion:"¿Tiendes a explicar por qué hiciste lo que hiciste antes de reconocer el daño? Practica decir 'hice daño' sin el 'pero...'"},
-      {dia:"Jueves",aspecto:"La disposición antes de la acción",versiculo:"Ezequiel 33:14-16",texto:'"Si el impío se volviere de su pecado y practicare el derecho y la justicia… de su pecado que cometió no se le recordará."',reflexion:"Haz hoy tu lista escrita. El ejercicio de escribir los nombres ya es un acto de responsabilidad."},
-      {dia:"Viernes",aspecto:"El amor no busca lo suyo",versiculo:"1 Corintios 13:5",texto:'"El amor no hace nada indebido, no busca lo suyo, no se irrita, no guarda rencor."',reflexion:"¿Pudiste ver en tu lista dónde tus acciones fueron más sobre ti que sobre el otro?"},
-      {dia:"Sábado",aspecto:"La restitución como acto concreto",versiculo:"Lucas 19:8",texto:'"Zaqueo dijo: He aquí, Señor, la mitad de mis bienes doy a los pobres; y si en algo he defraudado a alguno, se lo devuelvo cuadruplicado."',reflexion:"¿Estás genuinamente dispuesto a reparar el daño, no solo a sentirte mejor por haberlo reconocido?"}
+      {dia:"Lunes",aspecto:"Ver el impacto en los demás",versiculo:"Mateo 5:23-24",texto:'"Si traes tu ofrenda al altar y allí te acordás de que tu hermano tiene algo contra ti, reconcíliate primero."',reflexion:"¿Hay alguien que lleva una herida que vos le causaste, aunque sea sin intención?"},
+      {dia:"Martes",aspecto:"Honestidad sobre el daño causado",versiculo:"Lucas 15:17-18",texto:'"Me levantaré e iré a mi padre y le diré: Pequé."',reflexion:"¿Podés hacer un recuento honesto sin excusas ni justificaciones?"},
+      {dia:"Miércoles",aspecto:"Sin justificar las heridas causadas",versiculo:"Proverbios 20:9",texto:'"¿Quién podrá decir: Yo he limpiado mi corazón, limpio estoy de mi pecado?"',reflexion:"Practicá decir 'hice daño' sin el 'pero...'"},
+      {dia:"Jueves",aspecto:"La disposición antes de la acción",versiculo:"Ezequiel 33:14-16",texto:'"Si el impío se volviere de su pecado y practicare el derecho, de su pecado no se le recordará."',reflexion:"Hacé hoy tu lista escrita. El ejercicio de escribir los nombres ya es un acto de responsabilidad."},
+      {dia:"Viernes",aspecto:"El amor no busca lo suyo",versiculo:"1 Corintios 13:5",texto:'"El amor no hace nada indebido, no busca lo suyo, no se irrita, no guarda rencor."',reflexion:"¿Pudiste ver dónde tus acciones fueron más sobre vos que sobre el otro?"},
+      {dia:"Sábado",aspecto:"La restitución como acto concreto",versiculo:"Lucas 19:8",texto:'"Zaqueo dijo: si en algo he defraudado a alguno, se lo devuelvo cuadruplicado."',reflexion:"¿Estás genuinamente dispuesto a reparar el daño, no solo a sentirte mejor por haberlo reconocido?"}
     ]
   },
   {
     numero:9, paso:"Paso 9", titulo:"Reparar el Daño",
     descripcion:"Reparamos directamente el daño causado cuando fue posible, excepto cuando hacerlo implicaba perjudicar a otros.",
-    tema:"Acción concreta con sabiduría y compasión", color:"#1A6B5A",
+    tema:"Acción concreta con sabiduría y compasión", color:"#1A6B5A", completo:false,
     dias:[
-      {dia:"Lunes",aspecto:"El momento de actuar",versiculo:"Mateo 5:25",texto:'"Reconcíliate pronto con tu adversario, entre tanto que estás con él en el camino."',reflexion:"¿Hay una reparación que has pospuesto por miedo o vergüenza? ¿Qué necesitarías para dar el primer paso esta semana?"},
-      {dia:"Martes",aspecto:"La disculpa genuina",versiculo:"Lucas 15:21",texto:'"Y el hijo le dijo: Padre, he pecado contra el cielo y contra ti, y ya no soy digno de ser llamado tu hijo."',reflexion:"Una disculpa genuina nombra el daño específico y no pide nada a cambio. ¿Puedes practicar una sin esperar perdón?"},
-      {dia:"Miércoles",aspecto:"Restituir cuando es posible",versiculo:"Números 5:6-7",texto:'"Cuando un hombre o una mujer cometa cualquier pecado… entonces confesará el pecado que cometió y compensará por su culpa."',reflexion:"¿Hay algo concreto (tiempo, dinero, confianza, palabras) que puedas restituir a alguien?"},
-      {dia:"Jueves",aspecto:"Discernir cuándo no actuar",versiculo:"Mateo 10:16",texto:'"He aquí, yo os envío como a ovejas en medio de lobos; sed, pues, prudentes como serpientes y sencillos como palomas."',reflexion:"¿Hay casos en tu lista donde una disculpa directa podría hacer más daño? Busca consejo antes de actuar."},
-      {dia:"Viernes",aspecto:"La sanación no requiere autodestrucción",versiculo:"Romanos 8:28",texto:'"Y sabemos que a los que aman a Dios, todas las cosas les ayudan a bien."',reflexion:"¿Estás cargando culpa excesiva por daños del pasado? ¿Puedes creer que Dios puede traer bien incluso de esas situaciones?"},
-      {dia:"Sábado",aspecto:"La paz como resultado",versiculo:"Proverbios 16:7",texto:'"Cuando los caminos del hombre son agradables al Señor, aun a sus enemigos hace estar en paz con él."',reflexion:"¿Qué paz interna has comenzado a sentir al asumir responsabilidad? ¿Cómo ha cambiado alguna relación?"}
+      {dia:"Lunes",aspecto:"El momento de actuar",versiculo:"Mateo 5:25",texto:'"Reconcíliate pronto con tu adversario, entre tanto que estás con él en el camino."',reflexion:"¿Hay una reparación que has pospuesto por miedo o vergüenza?"},
+      {dia:"Martes",aspecto:"La disculpa genuina",versiculo:"Lucas 15:21",texto:'"Padre, he pecado contra el cielo y contra ti, y ya no soy digno de ser llamado tu hijo."',reflexion:"Una disculpa genuina nombra el daño específico y no pide nada a cambio."},
+      {dia:"Miércoles",aspecto:"Restituir cuando es posible",versiculo:"Números 5:6-7",texto:'"Confesará el pecado que cometió y compensará por su culpa."',reflexion:"¿Hay algo concreto que podás restituir a alguien?"},
+      {dia:"Jueves",aspecto:"Discernir cuándo no actuar",versiculo:"Mateo 10:16",texto:'"Sed prudentes como serpientes y sencillos como palomas."',reflexion:"¿Hay casos donde una disculpa directa podría hacer más daño? Buscá consejo antes de actuar."},
+      {dia:"Viernes",aspecto:"La sanación no requiere autodestrucción",versiculo:"Romanos 8:28",texto:'"Sabemos que a los que aman a Dios, todas las cosas les ayudan a bien."',reflexion:"¿Estás cargando culpa excesiva por daños del pasado?"},
+      {dia:"Sábado",aspecto:"La paz como resultado",versiculo:"Proverbios 16:7",texto:'"Cuando los caminos del hombre son agradables al Señor, aun a sus enemigos hace estar en paz con él."',reflexion:"¿Qué paz interna has comenzado a sentir al asumir responsabilidad?"}
     ]
   },
   {
     numero:10, paso:"Paso 10", titulo:"Mantenimiento Diario",
     descripcion:"Continuamos haciendo nuestro inventario personal y cuando nos equivocábamos lo admitíamos rápidamente.",
-    tema:"La disciplina continua como estilo de vida", color:"#4A5568",
+    tema:"La disciplina continua como estilo de vida", color:"#4A5568", completo:false,
     dias:[
-      {dia:"Lunes",aspecto:"El inventario como hábito",versiculo:"Lamentaciones 3:40",texto:'"Escudriñemos nuestros caminos y busquemos, y volvámonos al Señor."',reflexion:"¿Tienes una práctica diaria de reflexión? ¿Cómo podrías incorporarla en tu rutina?"},
-      {dia:"Martes",aspecto:"Admitir rápidamente los errores",versiculo:"Proverbios 28:13",texto:'"El que encubre sus pecados no prosperará, pero el que los confiesa y los abandona hallará misericordia."',reflexion:"¿Cuánto tiempo sueles tardar en admitir que te equivocaste? ¿Qué hace que eso sea difícil?"},
-      {dia:"Miércoles",aspecto:"Autocorrección sin condenación",versiculo:"1 Juan 1:9",texto:'"Si confesamos nuestros pecados, él es fiel y justo para perdonarnos los pecados y limpiarnos de toda maldad."',reflexion:"¿Puedes distinguir entre responsabilizarte (sano) y torturarte por el error (no sano)?"},
-      {dia:"Jueves",aspecto:"Vigilar los patrones que regresan",versiculo:"1 Corintios 10:12",texto:'"Así que, el que piensa estar firme, mire que no caiga."',reflexion:"¿Cuáles son las señales de alerta que indican que estás cayendo de nuevo en patrones codependientes?"},
-      {dia:"Viernes",aspecto:"Permanecer conectado a la vid",versiculo:"Juan 15:4-5",texto:'"Permaneced en mí, y yo en vosotros. Como el pámpano no puede llevar fruto por sí mismo… así tampoco vosotros si no permanecéis en mí."',reflexion:"¿Qué prácticas diarias te mantienen conectado a Dios y a tu proceso de sanación?"},
-      {dia:"Sábado",aspecto:"El crecimiento como proceso sin fin",versiculo:"Filipenses 1:6",texto:'"Estando persuadido de esto, que el que comenzó en vosotros la buena obra, la perfeccionará hasta el día de Jesucristo."',reflexion:"¿Cómo te tratas cuando sientes que no has avanzado suficiente? ¿Puedes confiar en que Dios sigue trabajando en ti?"}
+      {dia:"Lunes",aspecto:"El inventario como hábito",versiculo:"Lamentaciones 3:40",texto:'"Escudriñemos nuestros caminos y busquemos, y volvámonos al Señor."',reflexion:"¿Tenés una práctica diaria de reflexión? ¿Cómo podrías incorporarla en tu rutina?"},
+      {dia:"Martes",aspecto:"Admitir rápidamente los errores",versiculo:"Proverbios 28:13",texto:'"El que encubre sus pecados no prosperará, pero el que los confiesa hallará misericordia."',reflexion:"¿Cuánto tiempo tardás en admitir que te equivocaste? ¿Qué hace que eso sea difícil?"},
+      {dia:"Miércoles",aspecto:"Autocorrección sin condenación",versiculo:"1 Juan 1:9",texto:'"Si confesamos nuestros pecados, él es fiel y justo para perdonarnos."',reflexion:"¿Podés distinguir entre responsabilizarte (sano) y torturarte por el error (no sano)?"},
+      {dia:"Jueves",aspecto:"Vigilar los patrones que regresan",versiculo:"1 Corintios 10:12",texto:'"El que piensa estar firme, mire que no caiga."',reflexion:"¿Cuáles son las señales de alerta de que estás cayendo en patrones codependientes?"},
+      {dia:"Viernes",aspecto:"Permanecer conectado a la vid",versiculo:"Juan 15:4-5",texto:'"Permaneced en mí, y yo en vosotros. Como el pámpano no puede llevar fruto por sí mismo..."',reflexion:"¿Qué prácticas diarias te mantienen conectado a Dios y a tu proceso?"},
+      {dia:"Sábado",aspecto:"El crecimiento como proceso sin fin",versiculo:"Filipenses 1:6",texto:'"El que comenzó en vosotros la buena obra, la perfeccionará hasta el día de Jesucristo."',reflexion:"¿Cómo te tratás cuando sentís que no has avanzado suficiente?"}
     ]
   },
   {
     numero:11, paso:"Paso 11", titulo:"Conexión Espiritual",
     descripcion:"Buscamos mejorar nuestro contacto consciente con Dios a través de la oración y la meditación.",
-    tema:"Cultivar una vida interior profunda", color:"#2D5A8E",
+    tema:"Cultivar una vida interior profunda", color:"#2D5A8E", completo:false,
     dias:[
-      {dia:"Lunes",aspecto:"La práctica de la quietud",versiculo:"Salmo 46:10",texto:'"Estad quietos, y conoced que yo soy Dios."',reflexion:"¿Qué tan cómodo te sientes en el silencio? ¿Qué evitas sentir o escuchar cuando te quedas quieto?"},
-      {dia:"Martes",aspecto:"Escuchar a Dios en voz mansa",versiculo:"1 Reyes 19:12",texto:'"Tras el terremoto, un fuego; pero el Señor no estaba en el fuego. Y tras el fuego, una voz apacible y delicada."',reflexion:"¿Dónde y cuándo sientes más claramente la presencia de Dios? ¿Cómo puedes crear más espacio para eso?"},
-      {dia:"Miércoles",aspecto:"Una vida de oración continua",versiculo:"1 Tesalonicenses 5:17",texto:'"Orad sin cesar."',reflexion:"La oración no es solo un momento formal. ¿Cómo sería hablar con Dios a lo largo de todo tu día?"},
-      {dia:"Jueves",aspecto:"La meditación en su Palabra",versiculo:"Salmo 1:1-3",texto:'"En la ley del Señor está su delicia, y en su ley medita de día y de noche. Será como árbol plantado junto a corrientes de aguas."',reflexion:"¿Tienes un hábito de leer y meditar en la Biblia? ¿Qué texto te ha hablado profundamente últimamente?"},
-      {dia:"Viernes",aspecto:"Conocer la voluntad de Dios",versiculo:"Romanos 12:2",texto:'"Transformaos por medio de la renovación de vuestro entendimiento, para que comprobéis cuál es la voluntad de Dios."',reflexion:"¿Cómo disciernes la voluntad de Dios en tu vida? ¿Qué rol tienen la Palabra, la oración y la comunidad?"},
-      {dia:"Sábado",aspecto:"El valor para vivir lo que escuchamos",versiculo:"Josué 1:9",texto:'"¿No te lo he mandado yo? Esfuérzate y sé valiente; no temas ni desmayes, porque el Señor tu Dios estará contigo."',reflexion:"¿Hay algo que Dios te ha hablado pero todavía no has tenido el valor de actuar? ¿Qué necesitas de Él?"}
+      {dia:"Lunes",aspecto:"La práctica de la quietud",versiculo:"Salmo 46:10",texto:'"Estad quietos, y conoced que yo soy Dios."',reflexion:"¿Qué tan cómodo te sentís en el silencio? ¿Qué evitás sentir cuando te quedás quieto?"},
+      {dia:"Martes",aspecto:"Escuchar a Dios en voz mansa",versiculo:"1 Reyes 19:12",texto:'"Y tras el fuego, una voz apacible y delicada."',reflexion:"¿Dónde y cuándo sentís más claramente la presencia de Dios?"},
+      {dia:"Miércoles",aspecto:"Una vida de oración continua",versiculo:"1 Tesalonicenses 5:17",texto:'"Orad sin cesar."',reflexion:"¿Cómo sería hablar con Dios a lo largo de todo tu día?"},
+      {dia:"Jueves",aspecto:"La meditación en su Palabra",versiculo:"Salmo 1:1-3",texto:'"En la ley del Señor está su delicia, y en su ley medita de día y de noche."',reflexion:"¿Tenés un hábito de leer y meditar en la Biblia?"},
+      {dia:"Viernes",aspecto:"Conocer la voluntad de Dios",versiculo:"Romanos 12:2",texto:'"Transformaos por medio de la renovación de vuestro entendimiento."',reflexion:"¿Cómo discernís la voluntad de Dios en tu vida?"},
+      {dia:"Sábado",aspecto:"El valor para vivir lo que escuchamos",versiculo:"Josué 1:9",texto:'"Esfuérzate y sé valiente; no temas ni desmayes, porque el Señor tu Dios estará contigo."',reflexion:"¿Hay algo que Dios te ha hablado pero todavía no has tenido el valor de actuar?"}
     ]
   },
   {
     numero:12, paso:"Paso 12", titulo:"El Servicio",
     descripcion:"Habiendo logrado un despertar espiritual, tratamos de llevar este mensaje a otros y de practicar estos principios en todos los aspectos de nuestra vida.",
-    tema:"Compartir desde la abundancia, no desde la necesidad", color:"#8B1A1A",
+    tema:"Compartir desde la abundancia, no desde la necesidad", color:"#8B1A1A", completo:false,
     dias:[
-      {dia:"Lunes",aspecto:"Compartir lo que hemos recibido",versiculo:"2 Corintios 1:3-4",texto:'"…quien nos consuela en todas nuestras tribulaciones, para que también nosotros podamos consolar a los que están en cualquier tribulación."',reflexion:"¿Qué has aprendido en este camino que podría ser de ayuda para alguien más?"},
-      {dia:"Martes",aspecto:"Ser canal, no salvador",versiculo:"1 Corintios 3:6-7",texto:'"Yo planté, Apolos regó; pero el crecimiento lo ha dado Dios. Así que ni el que planta es algo, ni el que riega, sino Dios."',reflexion:"¿Cómo distingues entre ayudar genuinamente y caer en el patrón de querer salvar o controlar a otros?"},
-      {dia:"Miércoles",aspecto:"Llevar el mensaje con humildad",versiculo:"Gálatas 6:1",texto:'"Hermanos, si alguno fuere sorprendido en alguna falta, vosotros que sois espirituales, restauradle con espíritu de mansedumbre."',reflexion:"¿Con qué actitud quieres acompañar a otros? ¿Desde la experiencia compartida o desde la superioridad?"},
-      {dia:"Jueves",aspecto:"Los principios en todas las áreas",versiculo:"Colosenses 3:17",texto:'"Y todo lo que hacéis, sea de palabra o de hecho, hacedlo todo en el nombre del Señor Jesús."',reflexion:"¿En qué área de tu vida te cuesta más aplicar los principios de este camino?"},
-      {dia:"Viernes",aspecto:"La vida integrada",versiculo:"Miqueas 6:8",texto:'"Solamente hacer justicia, y amar misericordia, y humillarte ante tu Dios."',reflexion:"Al llegar al final de estas 12 semanas, ¿cuál es la transformación más significativa que notas en ti?"},
-      {dia:"Sábado",aspecto:"El fruto del camino recorrido",versiculo:"Juan 15:16",texto:'"No me elegisteis vosotros a mí, sino que yo os elegí a vosotros, y os he puesto para que vayáis y llevéis fruto, y vuestro fruto permanezca."',reflexion:"¿Qué fruto quieres que permanezca en tu vida? Escribe una carta de gratitud a Dios por lo que ha hecho."}
+      {dia:"Lunes",aspecto:"Compartir lo que hemos recibido",versiculo:"2 Corintios 1:3-4",texto:'"Quien nos consuela en todas nuestras tribulaciones, para que también nosotros podamos consolar a otros."',reflexion:"¿Qué has aprendido en este camino que podría ser de ayuda para alguien más?"},
+      {dia:"Martes",aspecto:"Ser canal, no salvador",versiculo:"1 Corintios 3:6-7",texto:'"Yo planté, Apolos regó; pero el crecimiento lo ha dado Dios."',reflexion:"¿Cómo distinguís entre ayudar genuinamente y volver a caer en rescatar?"},
+      {dia:"Miércoles",aspecto:"Llevar el mensaje con humildad",versiculo:"Gálatas 6:1",texto:'"Si alguno fuere sorprendido en alguna falta, restauradle con espíritu de mansedumbre."',reflexion:"¿Con qué actitud querés acompañar a otros?"},
+      {dia:"Jueves",aspecto:"Los principios en todas las áreas",versiculo:"Colosenses 3:17",texto:'"Todo lo que hacéis, sea de palabra o de hecho, hacedlo todo en el nombre del Señor Jesús."',reflexion:"¿En qué área de tu vida te cuesta más aplicar estos principios?"},
+      {dia:"Viernes",aspecto:"La vida integrada",versiculo:"Miqueas 6:8",texto:'"Solamente hacer justicia, amar misericordia y humillarte ante tu Dios."',reflexion:"¿Cuál es la transformación más significativa que notás en vos al llegar hasta acá?"},
+      {dia:"Sábado",aspecto:"El fruto del camino recorrido",versiculo:"Juan 15:16",texto:'"Os he puesto para que vayáis y llevéis fruto, y vuestro fruto permanezca."',reflexion:"Escribí una carta de gratitud a Dios por lo que ha hecho en este proceso."}
     ]
   }
 ];
 
 const TOTAL = 72;
-const COOKIE = "guia_biblica_v1";
+const COOKIE = "guia_biblica_v2";
 
 function getCookie() {
   try {
@@ -211,6 +324,118 @@ function saveCookie(data) {
   const exp = new Date(); exp.setFullYear(exp.getFullYear() + 2);
   document.cookie = `${COOKIE}=${encodeURIComponent(JSON.stringify(data))}; expires=${exp.toUTCString()}; path=/`;
 }
+
+// ─── COMPONENTS ──────────────────────────────────────────────────────────────
+
+function PlaceholderDay({ d, i, sem, done, toggle, expanded, setExpanded }) {
+  const k = `${sem.numero}-${i}`;
+  const isDone = !!done[k];
+  const isExp = expanded === i;
+  return (
+    <div className="day-card" style={{background:isDone?`${sem.color}0e`:"#13161f",border:`1px solid ${isDone?sem.color+"40":"#1e2130"}`,borderRadius:10,overflow:"hidden"}}>
+      <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 18px",cursor:"pointer"}} onClick={() => setExpanded(isExp?null:i)}>
+        <div className="check-circle" onClick={e=>{e.stopPropagation();toggle(sem.numero,i);}}
+          style={{width:34,height:34,borderRadius:"50%",background:isDone?sem.color:"transparent",border:`2px solid ${isDone?sem.color:"#2a2d3a"}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+          {isDone && <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8L6.5 11.5L13 5" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+        </div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:2,flexWrap:"wrap"}}>
+            <span style={{fontFamily:"'Lato',sans-serif",fontSize:11,fontWeight:700,color:sem.color,letterSpacing:1}}>{d.dia.toUpperCase()}</span>
+            <span style={{color:"#333"}}>·</span>
+            <span style={{fontFamily:"'Lato',sans-serif",fontSize:13,color:isDone?"#b8a87a":"#999"}}>{d.aspecto}</span>
+          </div>
+          <div style={{fontFamily:"'Lato',sans-serif",fontSize:11,color:"#555"}}>{d.versiculo}</div>
+        </div>
+        <svg className="expand-arrow" style={{transform:isExp?"rotate(180deg)":"rotate(0deg)",flexShrink:0}} width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 6L8 10L12 6" stroke="#444" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </div>
+      {isExp && (
+        <div style={{padding:"0 18px 18px"}}>
+          <div style={{background:"#0a0c12",borderLeft:`3px solid ${sem.color}`,borderRadius:"0 8px 8px 0",padding:"12px 14px",marginBottom:10}}>
+            <div style={{fontFamily:"'Lato',sans-serif",fontSize:9,color:sem.color,fontWeight:700,letterSpacing:2,marginBottom:5}}>{d.versiculo.toUpperCase()}</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:14,color:"#c0b090",lineHeight:1.75,fontStyle:"italic"}}>{d.texto}</div>
+          </div>
+          <div style={{background:"#0f1117",border:"1px solid #1a1d26",borderRadius:8,padding:"12px 14px",marginBottom:12}}>
+            <div style={{fontFamily:"'Lato',sans-serif",fontSize:9,color:"#666",fontWeight:700,letterSpacing:2,marginBottom:5}}>✦ REFLEXIÓN DEL DÍA</div>
+            <div style={{fontFamily:"'Lato',sans-serif",fontSize:13,color:"#aaa",lineHeight:1.8}}>{d.reflexion}</div>
+          </div>
+          <button className="action-btn" onClick={() => toggle(sem.numero,i)}
+            style={{width:"100%",padding:"10px",borderRadius:8,border:`1px solid ${isDone?sem.color:"#2a2d3a"}`,background:isDone?`${sem.color}20`:"transparent",color:isDone?sem.color:"#777",fontFamily:"'Lato',sans-serif",fontSize:12,fontWeight:700,letterSpacing:1}}>
+            {isDone ? "✓  COMPLETADO — clic para desmarcar" : "MARCAR COMO COMPLETADO"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FullDay({ d, i, sem, done, toggle, expanded, setExpanded }) {
+  const k = `${sem.numero}-${i}`;
+  const isDone = !!done[k];
+  const isExp = expanded === i;
+  return (
+    <div className="day-card" style={{background:isDone?`${sem.color}10`:"#13161f",border:`1px solid ${isDone?sem.color+"50":"#1e2130"}`,borderRadius:12,overflow:"hidden"}}>
+      {/* Header */}
+      <div style={{display:"flex",alignItems:"center",gap:14,padding:"16px 20px",cursor:"pointer"}} onClick={() => setExpanded(isExp?null:i)}>
+        <div className="check-circle" onClick={e=>{e.stopPropagation();toggle(sem.numero,i);}}
+          style={{width:36,height:36,borderRadius:"50%",background:isDone?sem.color:"transparent",border:`2px solid ${isDone?sem.color:"#2a2d3a"}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+          {isDone && <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8L6.5 11.5L13 5" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+        </div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:3,flexWrap:"wrap"}}>
+            <span style={{fontFamily:"'Lato',sans-serif",fontSize:11,fontWeight:700,color:sem.color,letterSpacing:1}}>{d.dia.toUpperCase()}</span>
+            <span style={{color:"#333"}}>·</span>
+            <span style={{fontFamily:"'Lato',sans-serif",fontSize:14,color:isDone?"#c8b880":"#bbb",fontWeight:isDone?700:400}}>{d.aspecto}</span>
+          </div>
+          <div style={{fontFamily:"'Lato',sans-serif",fontSize:11,color:"#555"}}>{d.versiculos.map(v=>v.ref).join(" · ")}</div>
+        </div>
+        <svg className="expand-arrow" style={{transform:isExp?"rotate(180deg)":"rotate(0deg)",flexShrink:0}} width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 6L8 10L12 6" stroke="#444" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </div>
+
+      {/* Expanded */}
+      {isExp && (
+        <div style={{padding:"0 20px 20px"}}>
+          {/* Enseñanza */}
+          <div style={{marginBottom:14}}>
+            <div style={{fontFamily:"'Lato',sans-serif",fontSize:9,color:sem.color,fontWeight:700,letterSpacing:2,marginBottom:8}}>ENSEÑANZA DEL DÍA</div>
+            {d.ensenanza.split("\n\n").map((p,idx) => (
+              <p key={idx} style={{fontFamily:"'Lato',sans-serif",fontSize:13,color:"#b0a898",lineHeight:1.85,marginBottom:10}}>{p}</p>
+            ))}
+          </div>
+
+          {/* Versículos */}
+          {d.versiculos.map((v,vi) => (
+            <div key={vi} style={{background:"#0a0c12",borderLeft:`3px solid ${sem.color}`,borderRadius:"0 8px 8px 0",padding:"12px 16px",marginBottom:10}}>
+              <div style={{fontFamily:"'Lato',sans-serif",fontSize:9,color:sem.color,fontWeight:700,letterSpacing:2,marginBottom:6}}>{v.ref.toUpperCase()}</div>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:14,color:"#c8b880",lineHeight:1.8,fontStyle:"italic"}}>{v.texto}</div>
+            </div>
+          ))}
+
+          {/* Preguntas */}
+          <div style={{background:"#0f1117",border:"1px solid #1a1d26",borderRadius:10,padding:"14px 16px",marginBottom:14}}>
+            <div style={{fontFamily:"'Lato',sans-serif",fontSize:9,color:"#888",fontWeight:700,letterSpacing:2,marginBottom:12}}>✦ PREGUNTAS DE REFLEXIÓN</div>
+            {d.preguntas.map((q,qi) => (
+              <div key={qi} className="q-item" style={{borderLeft:`2px solid ${sem.color}44`}}>
+                <div style={{fontFamily:"'Lato',sans-serif",fontSize:10,color:sem.color,fontWeight:700,letterSpacing:1,marginBottom:4}}>{qi+1}.</div>
+                <div style={{fontFamily:"'Lato',sans-serif",fontSize:13,color:"#b0a898",lineHeight:1.8}}>{q}</div>
+              </div>
+            ))}
+          </div>
+
+          <button className="action-btn" onClick={() => toggle(sem.numero,i)}
+            style={{width:"100%",padding:"11px",borderRadius:8,border:`1px solid ${isDone?sem.color:"#2a2d3a"}`,background:isDone?`${sem.color}22`:"transparent",color:isDone?sem.color:"#777",fontFamily:"'Lato',sans-serif",fontSize:12,fontWeight:700,letterSpacing:1}}>
+            {isDone ? "✓  COMPLETADO — clic para desmarcar" : "MARCAR COMO COMPLETADO"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── APP ─────────────────────────────────────────────────────────────────────
 
 function App() {
   const [semanaIdx, setSemanaIdx] = useState(0);
@@ -264,7 +489,6 @@ function App() {
         </div>
       </div>
 
-      {/* LAYOUT */}
       <div className="layout" style={{display:"flex",flex:1}}>
 
         {/* SIDEBAR */}
@@ -277,11 +501,16 @@ function App() {
             const p = Math.round((c/6)*100);
             const active = semanaIdx === i;
             return (
-              <button key={i} className="week-btn" onClick={() => { setSemanaIdx(i); setExpanded(null); }}
+              <button key={i} className="week-btn" onClick={() => {setSemanaIdx(i);setExpanded(null);}}
                 style={{display:"flex",alignItems:"center",gap:10,padding:"9px 14px",background:active?`${s.color}1a`:"transparent",borderLeft:active?`3px solid ${s.color}`:"3px solid transparent"}}>
-                <div style={{width:30,height:30,borderRadius:"50%",background:active?s.color:"#1a1d26",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,fontFamily:"'Lato',sans-serif",color:active?"#fff":"#555",flexShrink:0}}>{s.numero}</div>
+                <div style={{width:30,height:30,borderRadius:"50%",background:active?s.color:"#1a1d26",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,fontFamily:"'Lato',sans-serif",color:active?"#fff":"#555",flexShrink:0,position:"relative"}}>
+                  {s.numero}
+                  {!s.completo && <span style={{position:"absolute",bottom:-2,right:-2,width:8,height:8,borderRadius:"50%",background:"#2a2d3a",border:"1px solid #555",fontSize:6,display:"flex",alignItems:"center",justifyContent:"center",color:"#888"}}>✎</span>}
+                </div>
                 <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontFamily:"'Lato',sans-serif",fontSize:12,fontWeight:700,color:active?"#e8e0d0":"#777",marginBottom:3,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{s.titulo}</div>
+                  <div style={{display:"flex",alignItems:"center",gap:4,marginBottom:3}}>
+                    <div style={{fontFamily:"'Lato',sans-serif",fontSize:12,fontWeight:700,color:active?"#e8e0d0":"#777",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{s.titulo}</div>
+                  </div>
                   <div style={{display:"flex",alignItems:"center",gap:6}}>
                     <div style={{flex:1,height:3,background:"#1a1d26",borderRadius:2,overflow:"hidden"}}>
                       <div style={{width:`${p}%`,height:"100%",background:s.color,transition:"width 0.3s"}}/>
@@ -293,7 +522,11 @@ function App() {
               </button>
             );
           })}
-          <div style={{padding:"12px 14px",borderTop:"1px solid #1a1d26",marginTop:4}}>
+          {/* Legend */}
+          <div style={{padding:"10px 14px",borderTop:"1px solid #1a1d26",marginTop:4}}>
+            <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:6}}>
+              <span style={{fontFamily:"'Lato',sans-serif",fontSize:9,color:"#555"}}>✎ = próximamente enriquecido</span>
+            </div>
             <div style={{fontFamily:"'Lato',sans-serif",fontSize:10,color:"#444",marginBottom:4}}>{totalDone}/{TOTAL} días completados</div>
             <div style={{width:"100%",height:5,background:"#1a1d26",borderRadius:3,overflow:"hidden"}}>
               <div style={{width:`${pct}%`,height:"100%",background:"linear-gradient(90deg,#c49a00,#e8c547)",transition:"width 0.4s"}}/>
@@ -307,18 +540,24 @@ function App() {
           {/* Week header */}
           <div style={{marginBottom:28}}>
             <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:10}}>
-              <div style={{width:42,height:42,borderRadius:"50%",background:sem.color,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,fontWeight:700,fontFamily:"'Lato',sans-serif",color:"#fff",flexShrink:0}}>{sem.numero}</div>
+              <div style={{width:44,height:44,borderRadius:"50%",background:sem.color,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,fontWeight:700,fontFamily:"'Lato',sans-serif",color:"#fff",flexShrink:0}}>{sem.numero}</div>
               <div>
-                <div style={{fontFamily:"'Lato',sans-serif",fontSize:10,color:sem.color,letterSpacing:2,fontWeight:700,marginBottom:2}}>{sem.paso.toUpperCase()}</div>
+                <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:2}}>
+                  <div style={{fontFamily:"'Lato',sans-serif",fontSize:10,color:sem.color,letterSpacing:2,fontWeight:700}}>{sem.paso.toUpperCase()}</div>
+                  {!sem.completo && (
+                    <span style={{fontFamily:"'Lato',sans-serif",fontSize:9,color:"#555",background:"#1a1d26",border:"1px solid #2a2d3a",borderRadius:4,padding:"1px 6px",letterSpacing:1}}>PRÓXIMAMENTE</span>
+                  )}
+                </div>
                 <h1 className="week-title" style={{fontFamily:"'Playfair Display',serif",fontSize:24,fontWeight:700,color:"#e8e0d0",lineHeight:1.2}}>{sem.titulo}</h1>
               </div>
             </div>
-            <p style={{fontFamily:"'Lato',sans-serif",fontSize:13,color:"#777",lineHeight:1.7,fontStyle:"italic",maxWidth:580,marginBottom:8}}>{sem.descripcion}</p>
-            <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:14}}>
+            <p style={{fontFamily:"'Lato',sans-serif",fontSize:13,color:"#777",lineHeight:1.7,fontStyle:"italic",maxWidth:600,marginBottom:8}}>{sem.descripcion}</p>
+            <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:16}}>
               <span style={{color:sem.color,fontSize:11}}>✦</span>
               <span style={{fontFamily:"'Lato',sans-serif",fontSize:12,color:"#888"}}>Tema central: <span style={{color:"#b8a87a"}}>{sem.tema}</span></span>
             </div>
-            {/* mini progress dots */}
+
+            {/* Progress dots */}
             <div style={{display:"flex",alignItems:"center",gap:8}}>
               {sem.dias.map((_,i) => (
                 <div key={i} style={{flex:1,height:4,borderRadius:2,background:done[`${sem.numero}-${i}`]?sem.color:"#1e2130",transition:"background 0.3s"}}/>
@@ -331,53 +570,25 @@ function App() {
 
           {/* Day cards */}
           <div style={{display:"flex",flexDirection:"column",gap:12}}>
-            {sem.dias.map((d,i) => {
-              const k = `${sem.numero}-${i}`;
-              const isDone = !!done[k];
-              const isExp = expanded === i;
-              return (
-                <div key={i} className="day-card" style={{background:isDone?`${sem.color}0e`:"#13161f",border:`1px solid ${isDone?sem.color+"40":"#1e2130"}`,borderRadius:10,overflow:"hidden"}}>
-                  {/* Header row */}
-                  <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 18px",cursor:"pointer"}} onClick={() => setExpanded(isExp ? null : i)}>
-                    {/* Checkbox */}
-                    <div className="check-circle" onClick={e=>{e.stopPropagation();toggle(sem.numero,i);}}
-                      style={{width:34,height:34,borderRadius:"50%",background:isDone?sem.color:"transparent",border:`2px solid ${isDone?sem.color:"#2a2d3a"}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                      {isDone && <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8L6.5 11.5L13 5" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
-                    </div>
-                    <div style={{flex:1,minWidth:0}}>
-                      <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:2,flexWrap:"wrap"}}>
-                        <span style={{fontFamily:"'Lato',sans-serif",fontSize:11,fontWeight:700,color:sem.color,letterSpacing:1}}>{d.dia.toUpperCase()}</span>
-                        <span style={{color:"#333"}}>·</span>
-                        <span style={{fontFamily:"'Lato',sans-serif",fontSize:13,color:isDone?"#b8a87a":"#999"}}>{d.aspecto}</span>
-                      </div>
-                      <div style={{fontFamily:"'Lato',sans-serif",fontSize:11,color:"#555"}}>{d.versiculo}</div>
-                    </div>
-                    <svg className="expand-arrow" style={{transform:isExp?"rotate(180deg)":"rotate(0deg)",flexShrink:0}} width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M4 6L8 10L12 6" stroke="#444" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-
-                  {/* Expanded body */}
-                  {isExp && (
-                    <div style={{padding:"0 18px 18px"}}>
-                      <div style={{background:"#0a0c12",borderLeft:`3px solid ${sem.color}`,borderRadius:"0 8px 8px 0",padding:"12px 14px",marginBottom:10}}>
-                        <div style={{fontFamily:"'Lato',sans-serif",fontSize:9,color:sem.color,fontWeight:700,letterSpacing:2,marginBottom:5}}>{d.versiculo.toUpperCase()}</div>
-                        <div style={{fontFamily:"'Playfair Display',serif",fontSize:14,color:"#c0b090",lineHeight:1.75,fontStyle:"italic"}}>{d.texto}</div>
-                      </div>
-                      <div style={{background:"#0f1117",border:"1px solid #1a1d26",borderRadius:8,padding:"12px 14px",marginBottom:12}}>
-                        <div style={{fontFamily:"'Lato',sans-serif",fontSize:9,color:"#666",fontWeight:700,letterSpacing:2,marginBottom:5}}>✦ REFLEXIÓN DEL DÍA</div>
-                        <div style={{fontFamily:"'Lato',sans-serif",fontSize:13,color:"#aaa",lineHeight:1.8}}>{d.reflexion}</div>
-                      </div>
-                      <button className="action-btn" onClick={() => toggle(sem.numero,i)}
-                        style={{width:"100%",padding:"10px",borderRadius:8,border:`1px solid ${isDone?sem.color:"#2a2d3a"}`,background:isDone?`${sem.color}20`:"transparent",color:isDone?sem.color:"#777",fontFamily:"'Lato',sans-serif",fontSize:12,fontWeight:700,letterSpacing:1}}>
-                        {isDone ? "✓  COMPLETADO — clic para desmarcar" : "MARCAR COMO COMPLETADO"}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+            {sem.dias.map((d,i) =>
+              sem.completo
+                ? <FullDay key={i} d={d} i={i} sem={sem} done={done} toggle={toggle} expanded={expanded} setExpanded={setExpanded}/>
+                : <PlaceholderDay key={i} d={d} i={i} sem={sem} done={done} toggle={toggle} expanded={expanded} setExpanded={setExpanded}/>
+            )}
           </div>
+
+          {/* Tarea semanal (solo semana completa) */}
+          {sem.completo && sem.tarea && (
+            <div style={{marginTop:28,background:"#0d1018",border:`1px solid ${sem.color}30`,borderRadius:12,padding:"20px 22px"}}>
+              <div style={{fontFamily:"'Lato',sans-serif",fontSize:10,color:sem.color,fontWeight:700,letterSpacing:2,marginBottom:14}}>✦ TAREA DE LA SEMANA</div>
+              {sem.tarea.map((t,ti) => (
+                <div key={ti} style={{display:"flex",gap:12,marginBottom:10}}>
+                  <div style={{width:22,height:22,borderRadius:"50%",background:`${sem.color}20`,border:`1px solid ${sem.color}50`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Lato',sans-serif",fontSize:10,fontWeight:700,color:sem.color,flexShrink:0}}>{ti+1}</div>
+                  <div style={{fontFamily:"'Lato',sans-serif",fontSize:13,color:"#a0988a",lineHeight:1.75}}>{t}</div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Navigation */}
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:36,paddingTop:20,borderTop:"1px solid #1a1d26"}}>
