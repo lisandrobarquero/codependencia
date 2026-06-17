@@ -24,12 +24,41 @@ body{background:#0f1117;color:#e8e0d0;font-family:'Georgia',serif}
 .action-btn:hover:not(:disabled){opacity:0.85}
 .nav-btn{transition:all 0.2s;cursor:pointer}
 .nav-btn:hover:not(:disabled){background:rgba(255,255,255,0.05)!important}
+.menu-toggle{display:none}
+.sidebar-backdrop{display:none}
+.week-pill-mobile{display:none}
 @media(max-width:768px){
-  .layout{flex-direction:column!important}
-  .sidebar{width:100%!important;max-height:240px!important;position:relative!important;top:0!important}
-  .main-content{padding:20px 16px 48px!important}
+  .layout{flex-direction:column!important;position:relative}
+  .menu-toggle{display:flex!important}
+  .week-pill-mobile{display:flex!important}
+  .sidebar{
+    width:86%!important;
+    max-width:320px;
+    max-height:none!important;
+    position:fixed!important;
+    top:57px;
+    left:0;
+    bottom:0;
+    z-index:200;
+    transform:translateX(-105%);
+    transition:transform 0.28s ease;
+    box-shadow:6px 0 30px rgba(0,0,0,0.55);
+  }
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-backdrop.open{
+    display:block;
+    position:fixed;
+    top:57px;left:0;right:0;bottom:0;
+    background:rgba(0,0,0,0.55);
+    z-index:150;
+    animation:fadeIn 0.2s ease;
+  }
+  .main-content{padding:18px 14px 48px!important}
   h1.week-title{font-size:20px!important}
+  .progress-label{display:none!important}
+  .progress-bar-header{width:50px!important}
 }
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 </style>
 </head>
 <body>
@@ -1047,6 +1076,7 @@ function App() {
   const [semanaIdx, setSemanaIdx] = useState(0);
   const [done, setDone] = useState({});
   const [expanded, setExpanded] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(()=>{setDone(getCookie());},[]);
 
@@ -1070,19 +1100,25 @@ function App() {
     <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",background:"#0f1117"}}>
 
       {/* HEADER */}
-      <div style={{background:"linear-gradient(135deg,#1a1d26,#12151e)",borderBottom:"1px solid #1e2130",padding:"14px 20px",display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100}}>
-        <div style={{display:"flex",alignItems:"center",gap:10}}>
+      <div style={{background:"linear-gradient(135deg,#1a1d26,#12151e)",borderBottom:"1px solid #1e2130",padding:"14px 20px",display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,gap:10}}>
+        <div style={{display:"flex",alignItems:"center",gap:10,minWidth:0}}>
+          <button className="menu-toggle" onClick={()=>setSidebarOpen(true)}
+            style={{background:"transparent",border:"1px solid #2a2d3a",borderRadius:6,width:34,height:34,alignItems:"center",justifyContent:"center",cursor:"pointer",flexShrink:0,flexDirection:"column",gap:3}}>
+            <span style={{display:"block",width:14,height:1.5,background:"#888",borderRadius:1}}/>
+            <span style={{display:"block",width:14,height:1.5,background:"#888",borderRadius:1}}/>
+            <span style={{display:"block",width:14,height:1.5,background:"#888",borderRadius:1}}/>
+          </button>
           <span style={{color:"#c49a00",fontSize:20}}>✦</span>
-          <div>
+          <div style={{minWidth:0}}>
             <div style={{fontFamily:"'Playfair Display',serif",fontSize:15,fontWeight:700,color:"#e8e0d0"}}>Guía Bíblica</div>
-            <div style={{fontFamily:"'Lato',sans-serif",fontSize:10,color:"#555",letterSpacing:1}}>12 PASOS · LIBERTAD DE LA CODEPENDENCIA</div>
+            <div style={{fontFamily:"'Lato',sans-serif",fontSize:10,color:"#555",letterSpacing:1,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>12 PASOS · LIBERTAD DE LA CODEPENDENCIA</div>
           </div>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12}}>
           <div style={{textAlign:"right"}}>
-            <div style={{fontFamily:"'Lato',sans-serif",fontSize:10,color:"#555",marginBottom:4}}>PROGRESO TOTAL</div>
+            <div className="progress-label" style={{fontFamily:"'Lato',sans-serif",fontSize:10,color:"#555",marginBottom:4}}>PROGRESO TOTAL</div>
             <div style={{display:"flex",alignItems:"center",gap:8}}>
-              <div style={{width:90,height:5,background:"#1e2130",borderRadius:3,overflow:"hidden"}}>
+              <div className="progress-bar-header" style={{width:90,height:5,background:"#1e2130",borderRadius:3,overflow:"hidden"}}>
                 <div style={{width:`${pct}%`,height:"100%",background:"linear-gradient(90deg,#c49a00,#e8c547)",borderRadius:3,transition:"width 0.4s"}}/>
               </div>
               <span style={{fontFamily:"'Lato',sans-serif",fontSize:13,color:"#c49a00",fontWeight:700}}>{pct}%</span>
@@ -1094,17 +1130,22 @@ function App() {
 
       <div className="layout" style={{display:"flex",flex:1}}>
 
+        {/* BACKDROP (mobile) */}
+        <div className={`sidebar-backdrop ${sidebarOpen?"open":""}`} onClick={()=>setSidebarOpen(false)}></div>
+
         {/* SIDEBAR */}
-        <div className="sidebar" style={{width:250,background:"#0d1018",borderRight:"1px solid #1e2130",overflowY:"auto",flexShrink:0,maxHeight:"calc(100vh - 57px)",position:"sticky",top:57}}>
-          <div style={{padding:"14px 12px 6px"}}>
+        <div className={`sidebar ${sidebarOpen?"open":""}`} style={{width:250,background:"#0d1018",borderRight:"1px solid #1e2130",overflowY:"auto",flexShrink:0,maxHeight:"calc(100vh - 57px)",position:"sticky",top:57}}>
+          <div style={{padding:"14px 12px 6px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
             <div style={{fontFamily:"'Lato',sans-serif",fontSize:9,color:"#444",letterSpacing:2}}>SEMANAS</div>
+            <button onClick={()=>setSidebarOpen(false)} className="menu-toggle"
+              style={{background:"transparent",border:"none",color:"#555",cursor:"pointer",fontSize:16,alignItems:"center",justifyContent:"center",width:24,height:24}}>✕</button>
           </div>
           {SEMANAS.map((s,i)=>{
             const c=s.dias.filter((_,j)=>done[`${s.numero}-${j}`]).length;
             const p=Math.round((c/6)*100);
             const active=semanaIdx===i;
             return (
-              <button key={i} className="week-btn" onClick={()=>{setSemanaIdx(i);setExpanded(null);}}
+              <button key={i} className="week-btn" onClick={()=>{setSemanaIdx(i);setExpanded(null);setSidebarOpen(false);}}
                 style={{display:"flex",alignItems:"center",gap:10,padding:"9px 14px",background:active?`${s.color}1a`:"transparent",borderLeft:active?`3px solid ${s.color}`:"3px solid transparent"}}>
                 <div style={{width:30,height:30,borderRadius:"50%",background:active?s.color:"#1a1d26",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,fontFamily:"'Lato',sans-serif",color:active?"#fff":"#555",flexShrink:0}}>
                   {s.numero}
@@ -1136,6 +1177,22 @@ function App() {
 
         {/* MAIN */}
         <div className="main-content" style={{flex:1,overflowY:"auto",padding:"28px 28px 60px",maxHeight:"calc(100vh - 57px)"}}>
+
+          {/* Mobile week switcher pill */}
+          <button className="week-pill-mobile" onClick={()=>setSidebarOpen(true)}
+            style={{width:"100%",alignItems:"center",justifyContent:"space-between",gap:10,padding:"10px 14px",marginBottom:18,borderRadius:10,border:`1px solid ${sem.color}40`,background:`${sem.color}14`,cursor:"pointer",textAlign:"left"}}>
+            <div style={{display:"flex",alignItems:"center",gap:10,minWidth:0}}>
+              <div style={{width:28,height:28,borderRadius:"50%",background:sem.color,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,fontFamily:"'Lato',sans-serif",color:"#fff",flexShrink:0}}>{sem.numero}</div>
+              <div style={{minWidth:0}}>
+                <div style={{fontFamily:"'Lato',sans-serif",fontSize:9,color:sem.color,letterSpacing:2,fontWeight:700}}>{sem.paso.toUpperCase()}</div>
+                <div style={{fontFamily:"'Lato',sans-serif",fontSize:13,fontWeight:700,color:"#e8e0d0",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{sem.titulo}</div>
+              </div>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:6,flexShrink:0}}>
+              <span style={{fontFamily:"'Lato',sans-serif",fontSize:11,color:"#888"}}>Ver semanas</span>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="#888" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
+          </button>
 
           {/* Week header */}
           <div style={{marginBottom:28}}>
